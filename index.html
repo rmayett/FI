@@ -11,6 +11,98 @@
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script>
+  // Source: js/widgets/countdown.js
+$.widget( "metro.countdown" , {
+
+    version: "3.0.0",
+
+    options: {
+        stop: false,
+        days: false,
+        hours: false,
+        minutes: false,
+        seconds: false,
+        backgroundColor: 'bg-cyan',
+        digitColor: 'fg-white',
+        dividerColor: 'fg-dark',
+        labelColor: 'fg-grayLight',
+        labels: {
+            'days': 'days',
+            'hours': 'hours',
+            'minutes': 'mins',
+            'seconds': 'secs'
+        },
+        onTick: function(d, h, m, s){},
+        onStop: function(){}
+    },
+
+    _interval: 0,
+    _interval2: 0,
+    _alarmOn: undefined,
+
+    _create: function () {
+        //console.log('hi from countdown');
+
+        var that = this, element = this.element, o = this.options;
+
+        $.each(element.data(), function(key, value){
+            if (key in o) {
+                try {
+                    o[key] = $.parseJSON(value);
+                } catch (e) {
+                    o[key] = value;
+                }
+            }
+        });
+
+        this._alarmOn = new Date();
+
+        if (o.stop !== false) {
+            this._alarmOn = new Date(o.stop);
+        }
+
+        var dm = 24*60*60*1000, hm = 60*60*1000, mm = 60*1000, sm = 1000;
+
+        if (o.days !== false) {
+            if (typeof this._alarmOn === 'object') {
+                this._alarmOn = this._alarmOn.getTime();
+            }
+            this._alarmOn = this._alarmOn + o.days*dm;
+        }
+
+        if (o.hours !== false) {
+            if (typeof this._alarmOn === 'object') {
+                this._alarmOn = this._alarmOn.getTime();
+            }
+            this._alarmOn = this._alarmOn + o.hours*hm;
+        }
+
+        if (o.minutes !== false) {
+            if (typeof this._alarmOn === 'object') {
+                this._alarmOn = this._alarmOn.getTime();
+            }
+            this._alarmOn = this._alarmOn + o.minutes*mm;
+        }
+
+        if (o.seconds !== false) {
+            if (typeof this._alarmOn === 'object') {
+                this._alarmOn = this._alarmOn.getTime();
+            }
+            this._alarmOn = this._alarmOn + o.seconds*sm;
+        }
+
+        this._createDigits();
+
+        element.find('.digit').text('0');
+
+        that._tick();
+
+        element.data('countdown', this);
+
+    },
+
+  </script>
 <style>
 .countdown {
   display: inline-block;
